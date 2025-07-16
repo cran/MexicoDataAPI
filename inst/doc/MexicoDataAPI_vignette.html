@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>MexicoDataAPI: Access Mexican Data via APIs and Curated Datasets</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">MexicoDataAPI: Access Mexican Data via APIs
+and Curated Datasets</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(MexicoDataAPI)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; Adjuntando el paquete: &#39;dplyr&#39;</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:stats&#39;:</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co">#&gt;     filter, lag</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:base&#39;:</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span></code></pre></div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The <code>MexicoDataAPI</code> package provides a unified interface
+to access open data from the World Bank API and the REST Countries API,
+with a focus on <em>Mexico</em>. It allows users to retrieve up-to-date
+information on topics such as economic indicators, population figures,
+literacy rates, and unemployment levels, as well as basic geopolitical
+information.</p>
+<p>In addition to API-access functions, the package includes a set of
+curated datasets related to <em>Mexico</em>. These cover areas such as
+air quality monitoring, state-level income surveys, postal
+abbreviations, election results, and regional forest classification.</p>
+<p><code>MexicoDataAPI</code> is intended to support users working with
+data related to <em>Mexico</em> by integrating international API sources
+with selected datasets from national and academic origins, in a single R
+package.</p>
+<div id="functions-for-mexicodataapi" class="section level2">
+<h2>Functions for MexicoDataAPI</h2>
+<p>The <code>MexicoDataAPI</code> package provides several core
+functions to access real-time and structured information about Mexico
+from public APIs such as the <a href="https://datahelpdesk.worldbank.org/knowledgebase/articles/889392">World
+Bank API</a> and <a href="https://restcountries.com/">REST
+Countries</a>. Below is a list of the main functions included in the
+package:</p>
+<ul>
+<li><p><code>get_country_info()</code>: Get Key Country Information from
+the REST Countries API</p></li>
+<li><p><code>get_mexico_cpi()</code>: Get Mexico’s Consumer Price Index
+(2010 = 100) from World Bank</p></li>
+<li><p><code>get_mexico_gdp()</code>: Get Mexico’s GDP (Current US$)
+from World Bank</p></li>
+<li><p><code>get_mexico_life_expectancy()</code>: Get Mexico’s Life
+Expectancy from World Bank</p></li>
+<li><p><code>get_mexico_literacy_rate()</code>: Get Mexico’s Literacy
+Rate (Age 15+) from World Bank</p></li>
+<li><p><code>get_mexico_population()</code>: Get Mexico’s Population
+(Total) from World Bank</p></li>
+<li><p><code>get_mexico_unemployment()</code>: Get Mexico’s Unemployment
+Rate (%) from World Bank</p></li>
+<li><p><code>view_datasets_MexicoDataAPI()</code>: Lists all curated
+datasets included in the <code>MexicoDataAPI</code> package</p></li>
+</ul>
+<p>These functions allow users to access high-quality and structured
+information on <code>Mexico</code>, which can be combined with tools
+like <code>dplyr</code>, <code>tidyr</code>, and <code>ggplot2</code> to
+support a wide range of data analysis and visualization tasks. In the
+following sections, you’ll find examples on how to work with
+<code>MexicoDataAPI</code> in practical scenarios.</p>
+<div id="mexicos-gdp-current-us-from-world-bank-2022---2017" class="section level3">
+<h3>Mexico’s GDP (Current US$) from World Bank 2022 - 2017</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>mexico_gdp <span class="ot">&lt;-</span> <span class="fu">head</span>(<span class="fu">get_mexico_gdp</span>())</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">print</span>(mexico_gdp)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 5</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;   indicator         country  year   value value_label      </span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;             &lt;chr&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;            </span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; 1 GDP (current US$) Mexico   2022 1.47e12 1,466,464,899,304</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; 2 GDP (current US$) Mexico   2021 1.32e12 1,316,569,466,735</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; 3 GDP (current US$) Mexico   2020 1.12e12 1,121,064,767,402</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; 4 GDP (current US$) Mexico   2019 1.30e12 1,304,106,203,902</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; 5 GDP (current US$) Mexico   2018 1.26e12 1,256,300,182,776</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; 6 GDP (current US$) Mexico   2017 1.19e12 1,190,721,475,906</span></span></code></pre></div>
+</div>
+<div id="mexicos-life-expectancy-from-world-bank-2022---2017" class="section level3">
+<h3>Mexico’s Life Expectancy from World Bank 2022 - 2017</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>life_expectancy <span class="ot">&lt;-</span> <span class="fu">head</span>(<span class="fu">get_mexico_life_expectancy</span>())</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">print</span>(life_expectancy)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 4</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt;   indicator                               country  year value</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                                   &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; 1 Life expectancy at birth, total (years) Mexico   2022  74.0</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; 2 Life expectancy at birth, total (years) Mexico   2021  69.8</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; 3 Life expectancy at birth, total (years) Mexico   2020  70.4</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; 4 Life expectancy at birth, total (years) Mexico   2019  74.5</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; 5 Life expectancy at birth, total (years) Mexico   2018  74.3</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; 6 Life expectancy at birth, total (years) Mexico   2017  74.3</span></span></code></pre></div>
+</div>
+<div id="mexicos-population-total-from-world-bank-2022---2017" class="section level3">
+<h3>Mexico’s Population (Total) from World Bank 2022 - 2017</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>mexico_population <span class="ot">&lt;-</span> <span class="fu">head</span>(<span class="fu">get_mexico_population</span>())</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">print</span>(mexico_population)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 5</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt;   indicator         country  year     value value_label</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;             &lt;chr&gt;   &lt;int&gt;     &lt;int&gt; &lt;chr&gt;      </span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 1 Population, total Mexico   2022 128613117 128,613,117</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 2 Population, total Mexico   2021 127648148 127,648,148</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; 3 Population, total Mexico   2020 126799054 126,799,054</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; 4 Population, total Mexico   2019 125762982 125,762,982</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt; 5 Population, total Mexico   2018 124573711 124,573,711</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt; 6 Population, total Mexico   2017 123400057 123,400,057</span></span></code></pre></div>
+</div>
+<div id="average-household-income-by-education-level-2008" class="section level3">
+<h3>Average Household Income by Education Level (2008)</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co"># Summary of average income by education level</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>avg_income_by_education <span class="ot">&lt;-</span> mex_income_2008_tbl_df <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="fu">group_by</span>(education) <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avg_income =</span> <span class="fu">mean</span>(income, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_income))</span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="fu">ggplot</span>(avg_income_by_education, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(education, avg_income), <span class="at">y =</span> avg_income)) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;#0072B2&quot;</span>) <span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Average Household Income by Education Level (2008)&quot;</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Education Level&quot;</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Average Income (MXN)&quot;</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+</div>
+</div>
+<div id="dataset-suffixes" class="section level2">
+<h2>Dataset Suffixes</h2>
+<p>Each dataset in <code>MexicoDataAPI</code> is labeled with a
+<em>suffix</em> to indicate its structure and type:</p>
+<ul>
+<li><p><code>_df</code>: A standard data frame.</p></li>
+<li><p><code>_tbl_df</code>: A tibble data frame object.</p></li>
+<li><p><code>_chr</code>: A character object.</p></li>
+</ul>
+</div>
+<div id="datasets-included-in-mexicodataapi" class="section level2">
+<h2>Datasets Included in MexicoDataAPI</h2>
+<p>In addition to API access functions, <code>MexicoDataAPI</code>
+provides several preloaded datasets related to Mexico’s environment,
+demographics, and public data. Here are some featured examples:</p>
+<ul>
+<li><p><code>mexico_elections_df</code>: Data frame containing a subset
+of the 2012 Mexico Elections Panel Study.</p></li>
+<li><p><code>mex_income_2016_tbl_df</code>: Tibble containing
+household-level income data and associated demographic characteristics
+from the 2016 ENIGH (Household Income and Expenditure Survey).</p></li>
+<li><p><code>mexico_abb_chr</code>: Character vector containing the
+official two- or three-letter postal abbreviations for the 32 federal
+entities of Mexico.</p></li>
+</ul>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>The <code>MexicoDataAPI</code> package provides a comprehensive
+interface to access open data about <em>Mexico</em> through RESTful APIs
+and curated datasets. It includes functions to retrieve real-time
+information from the <em>World Bank API</em> and <em>REST Countries
+API</em>, <em>covering topics such as population, GDP, CPI, life
+expectancy, literacy, unemployment, and general country-level
+indicators</em>. In addition, the package offers curated datasets
+related to air quality monitoring stations, pollution zones, state-level
+income surveys for 2008 and 2016, postal abbreviations, election
+studies, and ecological data from the Chiapas dry forests. Together,
+these resources support research, teaching, and analysis focused on
+<em>Mexico</em>’s economic, environmental, and sociopolitical
+landscape.</p>
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
+
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
