@@ -48,8 +48,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,7 +61,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -355,12 +356,11 @@ and Curated Datasets</h1>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>The <code>MexicoDataAPI</code> package provides a unified interface
-to access open data from the <strong>World Bank API</strong>,
-<strong>REST Countries API</strong>, and <strong>Nager.Date
-API</strong>, with a focus on Mexico. It allows users to retrieve
-up-to-date information on topics such as economic indicators, population
-figures, literacy rates, unemployment levels, basic geopolitical
-information, and official public holidays.</p>
+to access open data from the <strong>World Bank API</strong> and
+<strong>Nager.Date API</strong>, with a focus on Mexico. It allows users
+to retrieve up-to-date information on topics such as economic
+indicators, population figures, literacy rates, unemployment levels, and
+official public holidays.</p>
 <p>In addition to API-access functions, the package includes a set of
 curated datasets related to <strong>Mexico</strong>. These cover areas
 such as air quality monitoring, state-level income surveys, postal
@@ -374,12 +374,10 @@ package.</p>
 <p>The <code>MexicoDataAPI</code> package provides several core
 functions to access real-time and structured information about Mexico
 from public APIs such as the <a href="https://datahelpdesk.worldbank.org/knowledgebase/articles/889392">World
-Bank API</a>, <a href="https://restcountries.com/">REST Countries</a>,
-and <a href="https://date.nager.at/Api">Nager.Date API</a>.</p>
+Bank API</a> and <a href="https://date.nager.at/Api">Nager.Date
+API</a>.</p>
 <p>Below is a list of the main functions included in the package:</p>
 <ul>
-<li><p><code>get_country_info_mx()</code>: Get Key Country Information
-about Mexico from the REST Countries API</p></li>
 <li><p><code>get_mexico_cpi()</code>: Get Mexico’s Consumer Price Index
 (2010 = 100) from World Bank</p></li>
 <li><p><code>get_mexico_gdp()</code>: Get Mexico’s GDP (Current US$)
@@ -414,12 +412,12 @@ following sections, you’ll find examples on how to work with
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; # A tibble: 6 × 5</span></span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;   indicator         country  year   value value_label      </span></span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;             &lt;chr&gt;   &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;            </span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; 1 GDP (current US$) Mexico   2022 1.47e12 1,466,464,899,304</span></span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; 2 GDP (current US$) Mexico   2021 1.32e12 1,316,569,466,735</span></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; 3 GDP (current US$) Mexico   2020 1.12e12 1,121,064,767,402</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; 4 GDP (current US$) Mexico   2019 1.30e12 1,304,106,203,902</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; 5 GDP (current US$) Mexico   2018 1.26e12 1,256,300,182,776</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; 6 GDP (current US$) Mexico   2017 1.19e12 1,190,721,475,906</span></span></code></pre></div>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; 1 GDP (current US$) Mexico   2022 1.47e12 1,466,934,724,243</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; 2 GDP (current US$) Mexico   2021 1.32e12 1,316,569,466,834</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; 3 GDP (current US$) Mexico   2020 1.12e12 1,121,064,767,169</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; 4 GDP (current US$) Mexico   2019 1.30e12 1,304,106,204,006</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co">#&gt; 5 GDP (current US$) Mexico   2018 1.26e12 1,256,300,182,984</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="co">#&gt; 6 GDP (current US$) Mexico   2017 1.19e12 1,190,721,475,853</span></span></code></pre></div>
 </div>
 <div id="mexicos-life-expectancy-from-world-bank-2022---2017" class="section level3">
 <h3>Mexico’s Life Expectancy from World Bank 2022 - 2017</h3>
@@ -507,17 +505,15 @@ entities of Mexico.</p></li>
 <p>The <code>MexicoDataAPI</code> package provides a comprehensive
 interface to access open data about <strong>Mexico</strong> through
 RESTful APIs and curated datasets. It includes functions to retrieve
-real-time information from the <strong>World Bank API</strong>,
-<strong>REST Countries API</strong>, and <strong>Nager.Date
-API</strong>, covering topics such as population, GDP, CPI, life
-expectancy, literacy, unemployment, general country-level indicators,
-and official public holidays. In addition, the package offers curated
-datasets related to air quality monitoring stations, pollution zones,
-state-level income surveys for 2008 and 2016, postal abbreviations,
-election studies, and ecological data from the Chiapas dry forests.
-Together, these resources support research, teaching, and analysis
-focused on Mexico’s economic, environmental, and sociopolitical
-landscape.</p>
+real-time information from the <strong>World Bank API</strong> and
+<strong>Nager.Date API</strong>, covering topics such as population,
+GDP, CPI, life expectancy, literacy, unemployment, and official public
+holidays. In addition, the package offers curated datasets related to
+air quality monitoring stations, pollution zones, state-level income
+surveys for 2008 and 2016, postal abbreviations, election studies, and
+ecological data from the Chiapas dry forests. Together, these resources
+support research, teaching, and analysis focused on Mexico’s economic,
+environmental, and sociopolitical landscape.</p>
 <div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
 
 </div>
